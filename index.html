@@ -28,7 +28,7 @@
   const scaling = "fit"; // this will resize to fit inside the screen dimensions
   const width = 1024;
   const height = 768;
-  const color = light; // ZIM colors like green, blue, pink, faint, clear, etc.
+  const color = green; // ZIM colors like green, blue, pink, faint, clear, etc.
   const outerColor = dark; // any HTML colors like "violet", "#333", etc. are fine to use
 
   const frame = new Frame(scaling, width, height, color, outerColor);
@@ -67,7 +67,7 @@
 
     //when working with sound on the web you need to add a button or progress bar... that is the rule
 
-	const screen = new Rectangle(stageW, stageH, yellow).centerReg();
+	//const screen = new Rectangle(stageW, stageH, yellow).centerReg();
 
     button = new Button({
       label: new Label({
@@ -82,7 +82,7 @@
 
       }).tap(() => {
         button.removeFrom();
-		screen.removeFrom();
+		//screen.removeFrom();
         startGame();
       });
 
@@ -95,7 +95,7 @@
           input:"mic", // that you are using the comp mic
 		  smoothing: 0.85,
 		  min:-80, //this is the minimum volume point to let register sound coming from the mic
-		  max:-75,
+		  max:-50,
 		  baseline:2,
           //magnify:5,
           include:0.117// I believe is what kind of frequencies to let pass. Its set to register low frequencies because we all create mostly low frequencies (its an acoustic phenomenon)
@@ -124,13 +124,10 @@
         });
 
 
-		const block = new Rectangle(20, 200, "red").pos(stageW,0)
-		.animate({
-			props:{x:-stageW},
-			loop: true,
-			time:4,
-			ease:"linear",
-		})
+		const platform1 = new Rectangle(240, 40, "blue").centerReg().pos(600, 500).addPhysics(false);
+
+		const platform = new Rectangle(240, 40, "red").centerReg().pos(200, 300).addPhysics(false);
+
 
       };// end of function startGame
 
