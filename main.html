@@ -136,12 +136,10 @@ function startIntro(){
 				  linear: 0.85,
 				  bounciness:0.4
 			  })
-			  .follow({dampY:0.8, borderLock:false});
+			  .follow({dampY:0.8, borderLock:false})
 			  .contact(o => {
                 if (o.type == "Border" && o.side == "bottom") {
-					pane.show();
 					zog("you lost");		//once ball makes contact with floor, it will zog "you lost"
-					ball.follow(null);		//stop the stage from following the ball, but HAS bug!
                 }
             });
 
@@ -193,6 +191,8 @@ function startIntro(){
 			const platform9 = new Rectangle(240, 25, "blue").centerReg().pos(180, -1200).addPhysics(false);
 
 		};
+
+	};
 
     stage.update(); // this is needed to show any changes
 
