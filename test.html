@@ -147,16 +147,19 @@ frame.on("ready", () => { // ES6 Arrow Function - like function(){}
 			const sand = new Rectangle(130, 25, "yellow").centerReg().pos(440, 2350).addPhysics(false);
 
 			const platform = new Rectangle(240, 25, "blue").centerReg().pos(180, 2000).addPhysics(false);
-			const platform2 = new Rectangle(240, 25, "blue").centerReg().pos(600, 1600).addPhysics(false);
-			const platform3 = new Rectangle(240, 25, "blue").centerReg().pos(180, 1200).addPhysics(false);
-			const platform4 = new Rectangle(240, 25, "blue").centerReg().pos(600, 800).addPhysics(false);
-			const platform5 = new Rectangle(240, 25, "blue").centerReg().pos(180, 400).addPhysics(false);
-			const platform6 = new Rectangle(240, 25, "blue").centerReg().pos(600, 0).addPhysics(false);
-			const platform7 = new Rectangle(240, 25, "blue").centerReg().pos(180, -400).addPhysics(false);
-			const platform8 = new Rectangle(240, 25, "blue").centerReg().pos(600, -800).addPhysics(false);
+				const platform2 = new Rectangle(240, 25, "blue").centerReg().pos(600, 1600).addPhysics(false);
+					const platform3 = new Rectangle(240, 25, "blue").centerReg().pos(180, 1200).addPhysics(false);
+						const platform4 = new Rectangle(240, 25, "blue").centerReg().pos(600, 800).addPhysics(false);
+							const platform5 = new Rectangle(240, 25, "blue").centerReg().pos(180, 400).addPhysics(false);
+						const platform6 = new Rectangle(240, 25, "blue").centerReg().pos(600, 0).addPhysics(false);
+					const platform7 = new Rectangle(240, 25, "blue").centerReg().pos(180, -400).addPhysics(false);
+				const platform8 = new Rectangle(240, 25, "blue").centerReg().pos(600, -800).addPhysics(false);
 			const platform9 = new Rectangle(240, 25, "blue").centerReg().pos(180, -1200).addPhysics(false);
-		};
 
+			zog(bg.width);
+			zog(bg.height);
+
+		};
 
 
     stage.update(); // this is needed to show any changes
