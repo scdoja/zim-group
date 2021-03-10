@@ -50,7 +50,6 @@ frame.on("ready", () => { // ES6 Arrow Function - like function(){}
     // There will be a warning in the conslole if your animation is not moving ;-)
 
 
-
 	button = new Button({
 		label: new Label({
 	        text:"START",
@@ -76,12 +75,15 @@ frame.on("ready", () => { // ES6 Arrow Function - like function(){}
 				  colors: blue,
 				  size: 40,
 				  rows: 100,
-				  cols: 20,
+				  cols: 25,
+				  cache: true,
 			  }).alp(1).reg(0,0).center();
 
 			  const physics = new Physics(15, new Boundary(bg.x, bg.y, bg.width, bg.height), true)
 
-			  const ball = new Circle(50, red)
+			  const pane = new Pane(300,200,"LOSE!",yellow).pos(350, -20).hide();
+
+			  const ball = new Circle(45, red)
 			  .centerReg()
 			  .pos(460,bg.height/2)
 			  .addPhysics({
@@ -89,7 +91,17 @@ frame.on("ready", () => { // ES6 Arrow Function - like function(){}
 				  linear: 0.85,
 				  bounciness:0.2
 			  })
-			  .follow({borderLock:false});
+			  .follow({dampY:0.8, borderLock:false})
+			  .contact(o => {
+                // zog(obj.type)
+                if (o.type == "Border" && o.side == "bottom") {
+					pane.show();
+					zog("you lost");	//once ball makes contact with floor, it will zog "you lost"
+					ball.follow(null);
+                }
+            });
+
+
 
 	        //soundwave allows u to use the mic
 	        var soundWave = new SoundWave({
@@ -119,23 +131,33 @@ frame.on("ready", () => { // ES6 Arrow Function - like function(){}
 	        // you can move the ball left or right with the arrow keys
 	        frame.on("keydown", function (e) {
 	          if (e.keyCode == 37) {
-	            ball.impulse(-100,0);
+	            ball.impulse(-50,0);
 	          } else if (e.keyCode == 39) {
-	            ball.impulse(100,0);
+	            ball.impulse(50,0);
 	          }
 	        });
 
-
-			const platform1 = new Rectangle(240, 40, "blue").centerReg().pos(600, bg.height/2).addPhysics(false);
-
-			const platform2 = new Rectangle(240, 40, "blue").centerReg().pos(180, 1800).addPhysics(false);
-
-			const platform3 = new Rectangle(240, 40, "blue").centerReg().pos(600, 1600).addPhysics(false);
-
+			//const container = new Container().pos(0,0);
+			//loop(15, function (i) {
+				//container.addChild(new Rectangle(220, 25, "blue").centerReg().pos(645, i*250).addPhysics(0).addTo(container));
+			//});
+			//stage.addChild(container);
 
 
+			const sand = new Rectangle(130, 25, "yellow").centerReg().pos(440, 2350).addPhysics(false);
 
+			const platform = new Rectangle(240, 25, "blue").centerReg().pos(180, 2000).addPhysics(false);
+			const platform2 = new Rectangle(240, 25, "blue").centerReg().pos(600, 1600).addPhysics(false);
+			const platform3 = new Rectangle(240, 25, "blue").centerReg().pos(180, 1200).addPhysics(false);
+			const platform4 = new Rectangle(240, 25, "blue").centerReg().pos(600, 800).addPhysics(false);
+			const platform5 = new Rectangle(240, 25, "blue").centerReg().pos(180, 400).addPhysics(false);
+			const platform6 = new Rectangle(240, 25, "blue").centerReg().pos(600, 0).addPhysics(false);
+			const platform7 = new Rectangle(240, 25, "blue").centerReg().pos(180, -400).addPhysics(false);
+			const platform8 = new Rectangle(240, 25, "blue").centerReg().pos(600, -800).addPhysics(false);
+			const platform9 = new Rectangle(240, 25, "blue").centerReg().pos(180, -1200).addPhysics(false);
 		};
+
+
 
     stage.update(); // this is needed to show any changes
 
