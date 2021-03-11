@@ -169,6 +169,11 @@ frame.on("ready", () => { // ES6 Arrow Function - like function(){}
 
 
 	function endGame(){
+ beachOcean.stop({volume:1.4,loop:true});
+    beachOcean2.stop({volume:1.5,loop:true});
+        seagulls.stop({volume:1.5,loop:true});
+        seagulls2.stop({volume:1.4,loop:true});
+          music.stop({volume:4,loop:true});
 		const tryagain = new Label({
 			text:"Oh no, the Beachball hit the ground! Click the button to try again.",
 			font:"cream",
