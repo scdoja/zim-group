@@ -115,7 +115,7 @@
       }).alp(1).reg(0,0).center(screen);
 
       const physics = new Physics(15, new Boundary(bg.x, bg.y, bg.width, bg.height), true)
-      const sand = new Rectangle(130, 25, "yellow").centerReg().pos(440, 2350).addPhysics(false);
+      const sand = new Rectangle(130, 25, "yellow").centerReg().pos(440, 2350).alp(1).addPhysics(false);
       const hotSand = new Rectangle(1024, 300, "orange").pos(0, 2450);
       const platform = new Rectangle(240, 25, "blue").centerReg().pos(180, 2000).addPhysics(false);
       const platform2 = new Rectangle(240, 25, "blue").centerReg().pos(600, 1600).addPhysics(false);
