@@ -1,0 +1,210 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>ZIM - Code Creativity</title>
+
+<!-- Welcome to ZIM at https://zimjs.com - Code Creativity!                              -->
+<!-- ZIM runs on the HTML Canvas powered by JavaScript and CreateJS https://createjs.com -->
+<!-- ZIM is free to use. You can donate to help improve ZIM at https://zimjs.com/donate  -->
+
+<script src="https://zimjs.org/cdn/1.3.2/createjs.js"></script>
+<script src="https://zimjs.org/cdn/cat/03/zim.js"></script>
+<script src="https://zimjs.org/cdn/pizzazz_03.js"></script>
+
+<script src="https://zimjs.org/cdn/Box2dWeb-2.1.a.3.min.js"></script>
+<script src="https://zimjs.org/cdn/physics_2.1.js"></script>
+
+<!-- use zimjs.com/distill for minified individual functions! -->
+
+<script>
+
+// SCALING OPTIONS
+// scaling can have values as follows with full being the default
+// "fit"	sets canvas and stage to dimensions and scales to fit inside window size
+// "outside"	sets canvas and stage to dimensions and scales to fit outside window size
+// "full"	sets stage to window size with no scaling
+// "tagID"	add canvas to HTML tag of ID - set to dimensions if provided - no scaling
+
+const scaling = "fit"; // this will resize to fit inside the screen dimensions
+const width = 1024;
+const height = 768;
+const color = "black"; // ZIM colors like green, blue, pink, faint, clear, etc.
+const outerColor = "black"; // any HTML colors like "violet", "#333", etc. are fine to use
+const assets =["beach_ocean.mp3", "beach_ocean2.mp3", "beach_seagulls.mp3", "beach_seagulls_2.mp3", "music.mp3"];
+const path = "assets/";
+const progress = new ProgressBar({barType:"rectangle"});
+
+const frame = new Frame(scaling, width, height, color, outerColor, assets, path, progress);
+frame.on("ready", () => { // ES6 Arrow Function - like function(){}
+    zog("ready from ZIM Frame"); // logs in console (F12 - choose console)
+
+    const stage = frame.stage;
+    let stageW = frame.width;
+    let stageH = frame.height;
+
+    // see https://zimjs.com/learn.html for video and code tutorials
+    // see https://zimjs.com/docs.html for documentation
+    // see https://zimjs.com/bits.html for 64 Interactive Media techniques
+
+    // *** NOTE: ZIM Cat defaults to time in seconds
+    // All previous versions, examples, videos, etc. have time in milliseconds
+    // This can be set back with TIME = "milliseconds" but we suggest you give it a try!
+    // There will be a warning in the conslole if your animation is not moving ;-)
+
+    // button2 = new Button({
+  	// 	label: new Label({
+  	//         text:"START",
+  	//         color:yellow,
+  	//         font:"OldStandardTT-Regular"}),
+  	//         backgroundColor:red,
+  	//         rollBackgroundColor:purple,
+  	//         corner:10
+  	// 	}).centerReg().alp(0).animate({
+  	//         props:{alpha:1},
+    //
+  	//       }).tap(() => {
+  	//         button2.removeFrom();
+  	// 		//screen.removeFrom();
+  	//         startIntro();
+  	//       });
+
+startIntro();
+
+function startIntro(){
+
+	asset("beach_ocean.mp3").play({
+  		volume:.2,
+  		loop:true
+	});
+
+	asset("beach_ocean2.mp3").play({
+  		volume:.3,
+  		loop:true
+	});
+
+	asset("beach_seagulls.mp3").play({
+  		volume:.2,
+  		loop:true
+	});
+
+	asset("beach_seagulls_2.mp3").play({
+  		volume:.2,
+  		loop:true
+	});
+
+	asset("music.mp3").play({
+  		volume:.4,
+  		loop:true
+	});
+
+	button = new Button({
+		label: new Label({
+	        text:"START",
+	        color:yellow,
+	        font:"OldStandardTT-Regular"}),
+	        backgroundColor:red,
+	        rollBackgroundColor:purple,
+	        corner:10
+		}).centerReg().alp(0).animate({
+	        props:{alpha:1},
+
+	      }).tap(() => {
+	        button.removeFrom();
+			//screen.removeFrom();
+	        startGame();
+	      });
+
+		  function startGame(){
+
+			  const bg = pizzazz.makePattern({
+				  type: "digital",
+				  backgroundColor: white,
+				  colors: blue,
+				  size: 40,
+				  rows: 100,
+				  cols: 25,
+			  }).alp(1).reg(0,0).center();
+
+			  const physics = new Physics(15, new Boundary(bg.x, bg.y, bg.width, bg.height), true)
+
+			  const ball = new Circle(45, red)
+			  .centerReg()
+			  .pos(460,bg.height/2)
+			  .addPhysics({
+				  density:1,
+				  linear: 0.85,
+				  bounciness:0.4
+			  })
+			  .follow({dampY:0.8, borderLock:false})
+			  .contact(o => {
+                if (o.type == "Border" && o.side == "bottom") {
+					zog("you lost");		//once ball makes contact with floor, it will zog "you lost"
+                }
+            });
+
+	        // soundwave allows u to use the mic
+	        var soundWave = new SoundWave({
+	          num:1, // I believe stands for frequency. We only need one freq (one sound) to trigger the ball
+	          input:"mic", // that you are using the comp mic
+			  smoothing: 0.85,
+			  min:-80, //this is the minimum volume point to let register sound coming from the mic
+			  max:-50,
+			  baseline:2,
+	          //magnify:5,
+	          include:0.117// I believe is what kind of frequencies to let pass. Its set to register low frequencies because we all create mostly low frequencies (its an acoustic phenomenon)
+	          // if you like, play around with those parameters and physics to get a better trigger effect
+	        });
+
+	        soundWave.on("ready", function(s) {
+
+	          Ticker.add(function() {
+	            // call the calculate() method of the soundWave
+	            var data = soundWave.calculate();
+
+	            //the frequency recorded by the mic will kick the ball up on the y axis. i believe because the frequency registration is set to low frequencies, the output number is around .01 to 0.1. This number is multiplied (by magnify) to move the ball up at a decent height
+	            ball.impulse(0, data*-0.1);
+	          })// end of ticker
+
+	        }); // end soundWave ready
+
+	        // you can move the ball left or right with the arrow keys
+	        frame.on("keydown", function (e) {
+	          if (e.keyCode == 37) {
+	            ball.impulse(-50,0);
+	          } else if (e.keyCode == 39) {
+	            ball.impulse(50,0);
+	          }
+	        });
+
+
+			const sand = new Rectangle(130, 25, "yellow").centerReg().pos(440, 2350).addPhysics(false);
+
+			const platform = new Rectangle(240, 25, "blue").centerReg().pos(180, 2000).addPhysics(false);
+				const platform2 = new Rectangle(240, 25, "blue").centerReg().pos(600, 1600).addPhysics(false);
+					const platform3 = new Rectangle(240, 25, "blue").centerReg().pos(180, 1200).addPhysics(false);
+						const platform4 = new Rectangle(240, 25, "blue").centerReg().pos(600, 800).addPhysics(false);
+							const platform5 = new Rectangle(240, 25, "blue").centerReg().pos(180, 400).addPhysics(false);
+						const platform6 = new Rectangle(240, 25, "blue").centerReg().pos(600, 0).addPhysics(false);
+					const platform7 = new Rectangle(240, 25, "blue").centerReg().pos(180, -400).addPhysics(false);
+				const platform8 = new Rectangle(240, 25, "blue").centerReg().pos(600, -800).addPhysics(false);
+			const platform9 = new Rectangle(240, 25, "blue").centerReg().pos(180, -1200).addPhysics(false);
+
+		};
+
+	};
+
+    stage.update(); // this is needed to show any changes
+
+}); // end of ready
+
+</script>
+
+<meta name="viewport" content="width=device-width, user-scalable=no" />
+
+</head>
+
+<body>
+<!-- canvas with id="myCanvas" is made by zim Frame -->
+</body>
+</html>
