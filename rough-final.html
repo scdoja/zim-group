@@ -1,42 +1,42 @@
 <!doctype html>
 <html>
 <head>
-<meta charset="utf-8" />
-<title>ZIM - Code Creativity</title>
+  <meta charset="utf-8" />
+  <title>ZIM - Code Creativity</title>
 
-<!-- Welcome to ZIM at https://zimjs.com - Code Creativity!                              -->
-<!-- ZIM runs on the HTML Canvas powered by JavaScript and CreateJS https://createjs.com -->
-<!-- ZIM is free to use. You can donate to help improve ZIM at https://zimjs.com/donate  -->
+  <!-- Welcome to ZIM at https://zimjs.com - Code Creativity!                              -->
+  <!-- ZIM runs on the HTML Canvas powered by JavaScript and CreateJS https://createjs.com -->
+  <!-- ZIM is free to use. You can donate to help improve ZIM at https://zimjs.com/donate  -->
 
-<script src="https://zimjs.org/cdn/1.3.2/createjs.js"></script>
-<script src="https://zimjs.org/cdn/cat/03/zim.js"></script>
-<script src="https://zimjs.org/cdn/pizzazz_03.js"></script>
+  <script src="https://zimjs.org/cdn/1.3.2/createjs.js"></script>
+  <script src="https://zimjs.org/cdn/cat/03/zim.js"></script>
+  <script src="https://zimjs.org/cdn/pizzazz_03.js"></script>
 
-<script src="https://zimjs.org/cdn/Box2dWeb-2.1.a.3.min.js"></script>
-<script src="https://zimjs.org/cdn/physics_2.1.js"></script>
+  <script src="https://zimjs.org/cdn/Box2dWeb-2.1.a.3.min.js"></script>
+  <script src="https://zimjs.org/cdn/physics_2.1.js"></script>
 
-<!-- use zimjs.com/distill for minified individual functions! -->
+  <!-- use zimjs.com/distill for minified individual functions! -->
 
-<script>
+  <script>
 
-// SCALING OPTIONS
-// scaling can have values as follows with full being the default
-// "fit"	sets canvas and stage to dimensions and scales to fit inside window size
-// "outside"	sets canvas and stage to dimensions and scales to fit outside window size
-// "full"	sets stage to window size with no scaling
-// "tagID"	add canvas to HTML tag of ID - set to dimensions if provided - no scaling
+  // SCALING OPTIONS
+  // scaling can have values as follows with full being the default
+  // "fit"	sets canvas and stage to dimensions and scales to fit inside window size
+  // "outside"	sets canvas and stage to dimensions and scales to fit outside window size
+  // "full"	sets stage to window size with no scaling
+  // "tagID"	add canvas to HTML tag of ID - set to dimensions if provided - no scaling
 
-const scaling = "fit"; // this will resize to fit inside the screen dimensions
-const width = 1024;
-const height = 768;
-const color = "green"; // ZIM colors like green, blue, pink, faint, clear, etc.
-const outerColor = "black"; // any HTML colors like "violet", "#333", etc. are fine to use
-const assets =["beachball.png","beach_ocean.mp3", "beach_ocean2.mp3", "beach_seagulls.mp3", "beach_seagulls_2.mp3", "music.mp3", {font:"cream", src:"cream.ttf"}];
-const path = "assets/";
-const progress = new ProgressBar({foregroundColor:"yellow", borderWidth:"0", barType:"rectangle"});
+  const scaling = "fit"; // this will resize to fit inside the screen dimensions
+  const width = 1024;
+  const height = 768;
+  const color = "green"; // ZIM colors like green, blue, pink, faint, clear, etc.
+  const outerColor = "black"; // any HTML colors like "violet", "#333", etc. are fine to use
+  const assets =["lose.mp3", "win.mp3", "beachball.png","beach_ocean.mp3", "beach_ocean2.mp3", "beach_seagulls.mp3", "beach_seagulls_2.mp3", "music.mp3", {font:"cream", src:"cream.ttf"}];
+  const path = "assets/";
+  const progress = new ProgressBar({foregroundColor:"yellow", borderWidth:"0", barType:"rectangle"});
 
-const frame = new Frame(scaling, width, height, color, outerColor, assets, path, progress);
-frame.on("ready", () => { // ES6 Arrow Function - like function(){}
+  const frame = new Frame(scaling, width, height, color, outerColor, assets, path, progress);
+  frame.on("ready", () => { // ES6 Arrow Function - like function(){}
     zog("ready from ZIM Frame"); // logs in console (F12 - choose console)
 
     const stage = frame.stage;
@@ -52,145 +52,206 @@ frame.on("ready", () => { // ES6 Arrow Function - like function(){}
     // This can be set back with TIME = "milliseconds" but we suggest you give it a try!
     // There will be a warning in the conslole if your animation is not moving ;-)
 
-	const start = new Container(stageW, stageH).addTo(stage);
+    const start = new Container(stageW, stageH).addTo(stage);
 
-	const steps = new Label({
-		text:"Float the beachball to the top! Don't let the beachball fall to the ground!",
-		font:"cream",
-		color:"yellow",
-		size: 20,
-	}).pos(0, 280, CENTER);
+    const steps = new Label({
+      text:"Float the beachball to the top! Don't let the beachball fall to the ground!",
+      font:"cream",
+      color:"yellow",
+      size: 20,
+    }).pos(0, 280, CENTER);
 
-	const steps2 = new Label({
-		text:"Please ACTIVATE your MICROPHONE! This game uses your beautiful voice.",
-		font:"cream",
-		color:"yellow",
-		size: 20,
-	}).pos(0, 200, CENTER);
+    const steps2 = new Label({
+      text:"Please ACTIVATE your MICROPHONE! This game uses your beautiful voice.",
+      font:"cream",
+      color:"yellow",
+      size: 20,
+    }).pos(0, 200, CENTER);
 
-	const buttonlabel = new Label({
-		text:"START",
-		size: 40,
-		font:"cream",
-		color: white,
-		bold:true,
-	});
+    const buttonlabel = new Label({
+      text:"START",
+      size: 40,
+      font:"cream",
+      color: white,
+      bold:true,
+    });
 
-	const button = new Button({
-		width: 250,
-        height: 50,
-        label:buttonlabel,
-        backgroundColor:"red",
-        rollBackgroundColor:"#af0000",
-        gradient:.2,
-        corner:0,
+    const button = new Button({
+      width: 250,
+      height: 50,
+      label:buttonlabel,
+      backgroundColor:"red",
+      rollBackgroundColor:"#af0000",
+      gradient:.2,
+      corner:0,
     }).center().alp(0).animate({props:{alpha:1}});
 
-	button.on("click", function(){
-		let beachOcean = asset("beach_ocean.mp3").play({volume:1.4,loop:true});
-			let beachOcean2 = asset("beach_ocean2.mp3").play({volume:1.5,loop:true});
-				let seagulls = asset("beach_seagulls.mp3").play({volume:1.5,loop:true});
-					let seagulls2 = asset("beach_seagulls_2.mp3").play({volume:1.4,loop:true});
-						let music = asset("music.mp3").play({volume:4,loop:true});
-		button.removeFrom();
-		start.removeFrom();
-		steps.removeFrom();
-		steps2.removeFrom();
-		stage.update();
-		startGame();
-	});
+    button.on("click", function(){
 
-	function startGame(){
-	const screen = new Container(stageW, stageH).addTo(stage);
-		const bg = pizzazz.makePattern({
-			type: "digital",
-			backgroundColor: white,
-			colors: blue,
-			size: 40,
-			rows: 100,
-			cols: 25,
-		}).alp(1).reg(0,0).center(screen);
+      button.removeFrom();
+      start.removeFrom();
+      steps.removeFrom();
+      steps2.removeFrom();
+      stage.update();
+      startGame();
+    });
 
-		const physics = new Physics(15, new Boundary(bg.x, bg.y, bg.width, bg.height), true)
+    function startGame(){
+      let beachOcean = asset("beach_ocean.mp3").play({volume:.5,loop:true});
+      let beachOcean2 = asset("beach_ocean2.mp3").play({loop:true});
+      let seagulls = asset("beach_seagulls.mp3").play({loop:true});
+      let seagulls2 = asset("beach_seagulls_2.mp3").play({loop:true});
+      let music = asset("music.mp3").play({loop:true});
 
 
-		const ball = asset("beachball.png").siz(100).centerReg().pos(460,bg.height/2)
-		.addPhysics({
-			shape:"circle",
-			density:0.6,
-			linear: 0.65,
-			bounciness:0.6,
-			angular: 0,
-		})
-		.follow({damp:0.1, dampY:0.8, borderLock:false})
-		.control({type:"arrows", speed: 55, vertical: false})
-		.contact(o => {
-		  if (o.type == "Border" && o.side == "bottom") {
-			  bg.removeFrom();
-			  ball.removeFrom();
-			  ball.follow(null);
-			  ball.noControl();
-			  Ticker.removeAll([stage]);
-			  endGame();
+      const screen = new Container(stageW, stageH).addTo(stage);
+      const bg = pizzazz.makePattern({
+        type: "digital",
+        backgroundColor: white,
+        colors: blue,
+        size: 40,
+        rows: 100,
+        cols: 25,
+      }).alp(1).reg(0,0).center(screen);
 
-		  	}
-	  	});
-
-		const soundWave = new SoundWave({
-			num:1,
-		    input:"mic",
-		    smoothing: 0.85,
-		    min:-70,
-		    max:-45,
-		    baseline:2,
-		    include:0.117,
-		});
-
-		soundWave.on("ready", function(s){
-			Ticker.add(function(){
-				var data = soundWave.calculate();
-				ball.impulse(0, data*-0.1);
-			})
-		});
-
-		const sand = new Rectangle(130, 25, "yellow").centerReg().pos(440, 2350).addPhysics(false);
-
-		const platform = new Rectangle(240, 25, "blue").centerReg().pos(180, 2000).addPhysics(false);
-			const platform2 = new Rectangle(240, 25, "blue").centerReg().pos(600, 1600).addPhysics(false);
-				const platform3 = new Rectangle(240, 25, "blue").centerReg().pos(180, 1200).addPhysics(false);
-					const platform4 = new Rectangle(240, 25, "blue").centerReg().pos(600, 800).addPhysics(false);
-						const platform5 = new Rectangle(240, 25, "blue").centerReg().pos(180, 400).addPhysics(false);
-					const platform6 = new Rectangle(240, 25, "blue").centerReg().pos(600, 0).addPhysics(false);
-				const platform7 = new Rectangle(240, 25, "blue").centerReg().pos(180, -400).addPhysics(false);
-			const platform8 = new Rectangle(240, 25, "blue").centerReg().pos(600, -800).addPhysics(false);
-		const platform9 = new Rectangle(240, 25, "blue").centerReg().pos(180, -1200).addPhysics(false);
-
-	}
+      const physics = new Physics(15, new Boundary(bg.x, bg.y, bg.width, bg.height), true)
+      const sand = new Rectangle(130, 25, "yellow").centerReg().pos(440, 2350).addPhysics(false);
+      const hotSand = new Rectangle(1024, 300, "orange").pos(0, 2450);
+      const platform = new Rectangle(240, 25, "blue").centerReg().pos(180, 2000).addPhysics(false);
+      const platform2 = new Rectangle(240, 25, "blue").centerReg().pos(600, 1600).addPhysics(false);
+      const platform3 = new Rectangle(240, 25, "blue").centerReg().pos(180, 1200).addPhysics(false);
+      const platform4 = new Rectangle(240, 25, "blue").centerReg().pos(600, 800).addPhysics(false);
+      const platform5 = new Rectangle(240, 25, "blue").centerReg().pos(180, 400).addPhysics(false);
+      const platform6 = new Rectangle(240, 25, "blue").centerReg().pos(600, 0).addPhysics(false);
+      const platform7 = new Rectangle(240, 25, "blue").centerReg().pos(180, -400).addPhysics(false);
+      const platform8 = new Rectangle(240, 25, "blue").centerReg().pos(600, -800).addPhysics(false);
+      const sun = new Circle(50, "orange").centerReg().pos(380, -1200).addPhysics(false);
 
 
-	function endGame(){
- beachOcean.stop({volume:1.4,loop:true});
-    beachOcean2.stop({volume:1.5,loop:true});
-        seagulls.stop({volume:1.5,loop:true});
-        seagulls2.stop({volume:1.4,loop:true});
-          music.stop({volume:4,loop:true});
-		const tryagain = new Label({
-			text:"Oh no, the Beachball hit the ground! Click the button to try again.",
-			font:"cream",
-			color:"red",
-			size: 25,
-		});
-		const pane = new Pane({width:850, height:450, label:tryagain, modal:false, displayClose:false}).pos(85, 1750);
-		const endscreen = new Container(stageW,stageH).addTo();
-		const button = new Button({
-      width:200,
-      height:60,
-      label:"Try Again"
+      const ball = asset("beachball.png").siz(100).centerReg().pos(460,bg.height/2)
+      .addPhysics({
+        shape:"circle",
+        density:0.6,
+        linear: 0.65,
+        bounciness:0.6,
+        angular: 0,
+      })
+      .follow({damp:0.1, dampY:0.8, borderLock:false})
+      .control({type:"arrows", speed: 55, vertical: false})
+      .contact(o => {
+        if (o.type == "Border" && o.side == "bottom") {
+          beachOcean.stop({volume:.5,loop:true});
+          beachOcean2.stop({loop:true});
+          seagulls.stop({loop:true});
+          seagulls2.stop({loop:true});
+          music.stop({loop:true});
+          sand.removeFrom();
+          platform.removeFrom();
+          platform2.removeFrom();
+          platform3.removeFrom();
+          platform4.removeFrom();
+          platform5.removeFrom();
+          platform6.removeFrom();
+          platform7.removeFrom();
+          platform8.removeFrom();
+          sun.removeFrom();
+          ball.removeFrom();
+          ball.removePhysics();
+          // bg.removeFrom();
+          // ball.follow();
+          // ball.noControl();
+          Ticker.removeAll([stage]);
+          endGame();
 
-  }).addTo(pane).pos(0, 280, CENTER, TOP);
-	}
+        }
+        if(ball.hitTestBounds(sun)){
+          beachOcean.stop({volume:.5,loop:true});
+          beachOcean2.stop({loop:true});
+          seagulls.stop({loop:true});
+          seagulls2.stop({loop:true});
+          music.stop({loop:true});
+          let win = asset("win.mp3").play({volume:.1});
+          sand.removeFrom();
+          platform.removeFrom();
+          platform2.removeFrom();
+          platform3.removeFrom();
+          platform4.removeFrom();
+          platform5.removeFrom();
+          platform6.removeFrom();
+          platform7.removeFrom();
+          platform8.removeFrom();
+          sun.removeFrom();
+          ball.removePhysics();
+          ball.removeFrom();
+          // bg.removeFrom();
+          // ball.follow();
+          // ball.noControl();
+          Ticker.removeAll([stage]);
+          champ();
+
+        }
+      });
+
+      const soundWave = new SoundWave({
+        num:1,
+        input:"mic",
+        smoothing: 0.85,
+        min:-70,
+        max:-45,
+        baseline:2,
+        include:0.117,
+      });
+
+      soundWave.on("ready", function(s){
+        Ticker.add(function(){
+          var data = soundWave.calculate();
+          ball.impulse(0, data*-0.1);
+        })
+      });
+
+    }
 
 
+    function endGame(){
+      let lose = asset("lose.mp3").play({volume:.1});
+      const tryagain = new Label({
+        text:"Oh no, the Beachball hit the ground! Click the button to try again.",
+        font:"cream",
+        color:"red",
+        size: 25,
+      });
+      const pane = new Pane({width:850, height:450, label:tryagain, modal:false, displayClose:false}).pos(85, 2050);
+      const endscreen = new Container(stageW,stageH).addTo();
+      const button2 = new Button(200,60,"Try Again").addTo(pane).pos(0, 280, CENTER, TOP);
+      button2.on("click", function(){
+        button2.removeFrom();
+        endscreen.removeFrom();
+        pane.hide();
+        tryagain.removeFrom();
+        stage.update();
+        startGame();
+      });
+    }
+
+    function champ(){
+      const awesome = new Label({
+        text:"SOOO HIIIGH, YOU KISSED THE SKYYY.",
+        font:"cream",
+        color:"red",
+        size: 25,
+      });
+      const pane2 = new Pane({width:850, height:450, label:awesome, modal:false, displayClose:false}).pos(85, -1200);
+      const endscreen2 = new Container(stageW,stageH).addTo();
+      const button3 = new Button(200,60,"Try Again").addTo(pane2).pos(0, 280, CENTER, TOP);
+      button3.on("click", function(){
+        button3.removeFrom();
+        endscreen2.removeFrom();
+        pane2.hide();
+        awesome.removeFrom();
+        stage.update();
+        startGame();
+      });
+    }
 
 
 
@@ -204,7 +265,7 @@ frame.on("ready", () => { // ES6 Arrow Function - like function(){}
 
     stage.update(); // this is needed to show any changes
 
-}); // end of ready
+  }); // end of ready
 
 </script>
 
@@ -213,6 +274,6 @@ frame.on("ready", () => { // ES6 Arrow Function - like function(){}
 </head>
 
 <body>
-<!-- canvas with id="myCanvas" is made by zim Frame -->
+  <!-- canvas with id="myCanvas" is made by zim Frame -->
 </body>
 </html>
