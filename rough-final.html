@@ -184,7 +184,7 @@
           ball.removePhysics();
           ball.removeFrom();
           // bg.removeFrom();
-          // ball.follow();
+          ball.follow();
           // ball.noControl();
           Ticker.removeAll([stage]);
           champ();
@@ -240,7 +240,7 @@
         color:"red",
         size: 25,
       });
-      const pane2 = new Pane({width:850, height:450, label:awesome, modal:false, displayClose:false}).pos(85, -1200);
+      const pane2 = new Pane({width:850, height:450, label:awesome, modal:false, displayClose:false}).pos(85, -1400);
       const endscreen2 = new Container(stageW,stageH).addTo();
       const button3 = new Button(200,60,"Try Again").addTo(pane2).pos(0, 280, CENTER, TOP);
       button3.on("click", function(){
