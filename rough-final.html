@@ -1,0 +1,210 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>ZIM - Code Creativity</title>
+
+<!-- Welcome to ZIM at https://zimjs.com - Code Creativity!                              -->
+<!-- ZIM runs on the HTML Canvas powered by JavaScript and CreateJS https://createjs.com -->
+<!-- ZIM is free to use. You can donate to help improve ZIM at https://zimjs.com/donate  -->
+
+<script src="https://zimjs.org/cdn/1.3.2/createjs.js"></script>
+<script src="https://zimjs.org/cdn/cat/03/zim.js"></script>
+<script src="https://zimjs.org/cdn/pizzazz_03.js"></script>
+
+<script src="https://zimjs.org/cdn/Box2dWeb-2.1.a.3.min.js"></script>
+<script src="https://zimjs.org/cdn/physics_2.1.js"></script>
+
+<!-- use zimjs.com/distill for minified individual functions! -->
+
+<script>
+
+// SCALING OPTIONS
+// scaling can have values as follows with full being the default
+// "fit"	sets canvas and stage to dimensions and scales to fit inside window size
+// "outside"	sets canvas and stage to dimensions and scales to fit outside window size
+// "full"	sets stage to window size with no scaling
+// "tagID"	add canvas to HTML tag of ID - set to dimensions if provided - no scaling
+
+const scaling = "fit"; // this will resize to fit inside the screen dimensions
+const width = 1024;
+const height = 768;
+const color = "green"; // ZIM colors like green, blue, pink, faint, clear, etc.
+const outerColor = "black"; // any HTML colors like "violet", "#333", etc. are fine to use
+const assets =["beachball.png", "umbrella_yellow.png", "umbrella_yellow_2.png", "umbrella_yellow_3.png", "umbrella_blue.png", "umbrella_blue_2.png", "umbrella_blue_3.png", "umbrella_red.png", "umbrella_red_2.png", "umbrella_red_3.png", "beach_2.png", "beach_ocean.mp3", "beach_ocean2.mp3", "beach_seagulls.mp3", "beach_seagulls_2.mp3", "music.mp3", {font:"cream", src:"cream.ttf"}];
+const path = "assets/";
+const progress = new ProgressBar({foregroundColor:"yellow", borderWidth:"0", barType:"rectangle"});
+
+const frame = new Frame(scaling, width, height, color, outerColor, assets, path, progress);
+frame.on("ready", () => { // ES6 Arrow Function - like function(){}
+    zog("ready from ZIM Frame"); // logs in console (F12 - choose console)
+
+    const stage = frame.stage;
+    let stageW = frame.width;
+    let stageH = frame.height;
+
+    // see https://zimjs.com/learn.html for video and code tutorials
+    // see https://zimjs.com/docs.html for documentation
+    // see https://zimjs.com/bits.html for 64 Interactive Media techniques
+
+    // *** NOTE: ZIM Cat defaults to time in seconds
+    // All previous versions, examples, videos, etc. have time in milliseconds
+    // This can be set back with TIME = "milliseconds" but we suggest you give it a try!
+    // There will be a warning in the conslole if your animation is not moving ;-)
+
+	const start = new Container(stageW, stageH).addTo(stage);
+
+	const steps = new Label({
+		text:"Float the beachball to the top! Don't let the beachball fall to the ground!",
+		font:"cream",
+		color:"yellow",
+		size: 20,
+	}).pos(0, 280, CENTER);
+
+	const steps2 = new Label({
+		text:"Please ACTIVATE your MICROPHONE! This game uses your beautiful voice.",
+		font:"cream",
+		color:"yellow",
+		size: 20,
+	}).pos(0, 200, CENTER);
+
+	const buttonlabel = new Label({
+		text:"START",
+		size: 40,
+		font:"cream",
+		color: white,
+		bold:true,
+	});
+
+	const button = new Button({
+		width: 250,
+        height: 50,
+        label:buttonlabel,
+        backgroundColor:"red",
+        rollBackgroundColor:"#af0000",
+        gradient:.2,
+        corner:0,
+    }).center().alp(0).animate({props:{alpha:1}});
+
+	button.on("click", function(){
+		asset("beach_ocean.mp3").play({volume:.2,loop:true});
+			asset("beach_ocean2.mp3").play({volume:.3,loop:true});
+				asset("beach_seagulls.mp3").play({volume:.2,loop:true});
+					asset("beach_seagulls_2.mp3").play({volume:.2,loop:true});
+						asset("music.mp3").play({volume:.4,loop:true});
+		button.removeFrom();
+		start.removeFrom();
+		steps.removeFrom();
+		steps2.removeFrom();
+		stage.update();
+		startGame();
+	});
+
+	function startGame(){
+	const screen = new Container(stageW, stageH).addTo(stage);
+		// const bg = pizzazz.makePattern({
+		// 	type: "digital",
+		// 	backgroundColor: white,
+		// 	colors: blue,
+		// 	size: 40,
+		// 	rows: 100,
+		// 	cols: 25,
+		// }).alp(1).reg(0,0).center(screen);
+
+    const bg = asset("beach_2.png").alp(1).reg(0,0).center(screen);
+
+		const physics = new Physics(15, new Boundary(bg.x, bg.y, bg.width, bg.height), true)
+
+
+		const ball = asset("beachball.png").siz(100).centerReg().pos(460,bg.height/2)
+		.addPhysics({
+			shape:"circle",
+			density:0.6,
+			linear: 0.65,
+			bounciness:0.6,
+			angular: 0,
+		})
+		.follow({damp:0.1, dampY:0.8, borderLock:false})
+		.control({type:"arrows", speed: 55, vertical: false})
+		.contact(o => {
+		  if (o.type == "Border" && o.side == "bottom") {
+			  bg.removeFrom();
+			  ball.removeFrom();
+			  ball.follow(null);
+			  ball.noControl();
+			  Ticker.removeAll([stage]);
+			  endGame();
+
+		  	}
+	  	});
+
+		const soundWave = new SoundWave({
+			num:1,
+		    input:"mic",
+		    smoothing: 0.85,
+		    min:-70,
+		    max:-45,
+		    baseline:2,
+		    include:0.117,
+		});
+
+		soundWave.on("ready", function(s){
+			Ticker.add(function(){
+				var data = soundWave.calculate();
+				ball.impulse(0, data*-0.1);
+			})
+		});
+
+		const sand = new Rectangle(130, 25, "yellow").centerReg().pos(440, 2350).addPhysics(false);
+
+		const platform = asset("umbrella_yellow.png").centerReg().pos(180, 2000).addPhysics(false);
+			const platform2 = asset("umbrella_red.png").centerReg().pos(600, 1600).addPhysics(false);
+				const platform3 = asset("umbrella_blue.png").centerReg().pos(180, 1200).addPhysics(false);
+					const platform4 = asset("umbrella_yellow_2.png").centerReg().pos(600, 800).addPhysics(false);
+						const platform5 = asset("umbrella_red_2.png").centerReg().pos(180, 400).addPhysics(false);
+					const platform6 = asset("umbrella_blue_2.png").centerReg().pos(600, 0).addPhysics(false);
+				const platform7 = asset("umbrella_yellow_3.png").centerReg().pos(180, -400).addPhysics(false);
+			const platform8 = asset("umbrella_red_3.png").centerReg().pos(600, -800).addPhysics(false);
+		const platform9 = asset("umbrella_blue_3.png").centerReg().pos(180, -1200).addPhysics(false);
+
+	}
+
+
+	function endGame(){
+		const tryagain = new Label({
+			text:"Oh no, the Beachball hit the ground! Click the button to try again.",
+			font:"cream",
+			color:"red",
+			size: 25,
+		});
+		const pane = new Pane({width:850, height:450, label:tryagain, modal:false, displayClose:false}).pos(85, 1750);
+		const endscreen = new Container(stageW,stageH).addTo();
+		const button = new Button(200,60,"Try Again").addTo(pane).pos(0, 280, CENTER, TOP);
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+    stage.update(); // this is needed to show any changes
+
+}); // end of ready
+
+</script>
+
+<meta name="viewport" content="width=device-width, user-scalable=no" />
+
+</head>
+
+<body>
+<!-- canvas with id="myCanvas" is made by zim Frame -->
+</body>
+</html>
