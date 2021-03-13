@@ -31,7 +31,7 @@ const width = 1024;
 const height = 768;
 const color = "green"; // ZIM colors like green, blue, pink, faint, clear, etc.
 const outerColor = "black"; // any HTML colors like "violet", "#333", etc. are fine to use
-const assets =["beachball.png","beach_ocean.mp3", "beach_ocean2.mp3", "beach_seagulls.mp3", "beach_seagulls_2.mp3", "music.mp3", {font:"cream", src:"cream.ttf"}];
+const assets =["beachball.png", "umbrella_yellow.png", "umbrella_yellow_2.png", "umbrella_yellow_3.png", "umbrella_blue.png", "umbrella_blue_2.png", "umbrella_blue_3.png", "umbrella_red.png", "umbrella_red_2.png", "umbrella_red_3.png", "beach_2.png", "beach_ocean.mp3", "beach_ocean2.mp3", "beach_seagulls.mp3", "beach_seagulls_2.mp3", "music.mp3", {font:"cream", src:"cream.ttf"}];
 const path = "assets/";
 const progress = new ProgressBar({foregroundColor:"yellow", borderWidth:"0", barType:"rectangle"});
 
@@ -102,14 +102,16 @@ frame.on("ready", () => { // ES6 Arrow Function - like function(){}
 
 	function startGame(){
 	const screen = new Container(stageW, stageH).addTo(stage);
-		const bg = pizzazz.makePattern({
-			type: "digital",
-			backgroundColor: white,
-			colors: blue,
-			size: 40,
-			rows: 100,
-			cols: 25,
-		}).alp(1).reg(0,0).center(screen);
+		// const bg = pizzazz.makePattern({
+		// 	type: "digital",
+		// 	backgroundColor: white,
+		// 	colors: blue,
+		// 	size: 40,
+		// 	rows: 100,
+		// 	cols: 25,
+		// }).alp(1).reg(0,0).center(screen);
+
+    const bg = asset("beach_2.png").alp(1).reg(0,0).center(screen);
 
 		const physics = new Physics(15, new Boundary(bg.x, bg.y, bg.width, bg.height), true)
 
@@ -155,15 +157,15 @@ frame.on("ready", () => { // ES6 Arrow Function - like function(){}
 
 		const sand = new Rectangle(130, 25, "yellow").centerReg().pos(440, 2350).addPhysics(false);
 
-		const platform = new Rectangle(240, 25, "blue").centerReg().pos(180, 2000).addPhysics(false);
-			const platform2 = new Rectangle(240, 25, "blue").centerReg().pos(600, 1600).addPhysics(false);
-				const platform3 = new Rectangle(240, 25, "blue").centerReg().pos(180, 1200).addPhysics(false);
-					const platform4 = new Rectangle(240, 25, "blue").centerReg().pos(600, 800).addPhysics(false);
-						const platform5 = new Rectangle(240, 25, "blue").centerReg().pos(180, 400).addPhysics(false);
-					const platform6 = new Rectangle(240, 25, "blue").centerReg().pos(600, 0).addPhysics(false);
-				const platform7 = new Rectangle(240, 25, "blue").centerReg().pos(180, -400).addPhysics(false);
-			const platform8 = new Rectangle(240, 25, "blue").centerReg().pos(600, -800).addPhysics(false);
-		const platform9 = new Rectangle(240, 25, "blue").centerReg().pos(180, -1200).addPhysics(false);
+		const platform = asset("umbrella_yellow.png").centerReg().pos(180, 2000).addPhysics(false);
+			const platform2 = asset("umbrella_red.png").centerReg().pos(600, 1600).addPhysics(false);
+				const platform3 = asset("umbrella_blue.png").centerReg().pos(180, 1200).addPhysics(false);
+					const platform4 = asset("umbrella_yellow_2.png").centerReg().pos(600, 800).addPhysics(false);
+						const platform5 = asset("umbrella_red_2.png").centerReg().pos(180, 400).addPhysics(false);
+					const platform6 = asset("umbrella_blue_2.png").centerReg().pos(600, 0).addPhysics(false);
+				const platform7 = asset("umbrella_yellow_3.png").centerReg().pos(180, -400).addPhysics(false);
+			const platform8 = asset("umbrella_red_3.png").centerReg().pos(600, -800).addPhysics(false);
+		const platform9 = asset("umbrella_blue_3.png").centerReg().pos(180, -1200).addPhysics(false);
 
 	}
 
