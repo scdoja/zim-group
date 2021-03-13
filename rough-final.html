@@ -31,7 +31,7 @@ const width = 1024;
 const height = 768;
 const color = "green"; // ZIM colors like green, blue, pink, faint, clear, etc.
 const outerColor = "black"; // any HTML colors like "violet", "#333", etc. are fine to use
-const assets =["beachball.png", "umbrella_yellow.png", "umbrella_yellow_2.png", "umbrella_yellow_3.png", "umbrella_blue.png", "umbrella_blue_2.png", "umbrella_blue_3.png", "umbrella_red.png", "umbrella_red_2.png", "umbrella_red_3.png", "beach_2.png", "beach_ocean.mp3", "beach_ocean2.mp3", "beach_seagulls.mp3", "beach_seagulls_2.mp3", "music.mp3", {font:"cream", src:"cream.ttf"}];
+const assets =[ "gravitybeach.jpg", "gravitybeach_icon.png", "beachball.png", "umbrella_yellow.png", "umbrella_yellow_2.png", "umbrella_yellow_3.png", "umbrella_blue.png", "umbrella_blue_2.png", "umbrella_blue_3.png", "umbrella_red.png", "umbrella_red_2.png", "umbrella_red_3.png", "beach_2.png", "beach_ocean.mp3", "beach_ocean2.mp3", "beach_seagulls.mp3", "beach_seagulls_2.mp3", "music.mp3", {font:"cream", src:"cream.ttf"}];
 const path = "assets/";
 const progress = new ProgressBar({foregroundColor:"yellow", borderWidth:"0", barType:"rectangle"});
 
@@ -54,19 +54,23 @@ frame.on("ready", () => { // ES6 Arrow Function - like function(){}
 
 	const start = new Container(stageW, stageH).addTo(stage);
 
+  let backgroundImage = asset("gravitybeach.jpg").centerReg().addTo(start);
+
+  let logo = asset("gravitybeach_icon.png").centerReg().mov(0,-120).addTo(start);
+
 	const steps = new Label({
 		text:"Float the beachball to the top! Don't let the beachball fall to the ground!",
 		font:"cream",
-		color:"yellow",
+		color:"dark",
 		size: 20,
-	}).pos(0, 280, CENTER);
+	}).pos(0, 280, CENTER).mov(0,280);
 
 	const steps2 = new Label({
 		text:"Please ACTIVATE your MICROPHONE! This game uses your beautiful voice.",
 		font:"cream",
-		color:"yellow",
+		color:"dark",
 		size: 20,
-	}).pos(0, 200, CENTER);
+	}).pos(0, 200, CENTER).mov(0,330);
 
 	const buttonlabel = new Label({
 		text:"START",
@@ -84,7 +88,7 @@ frame.on("ready", () => { // ES6 Arrow Function - like function(){}
         rollBackgroundColor:"#af0000",
         gradient:.2,
         corner:0,
-    }).center().alp(0).animate({props:{alpha:1}});
+    }).center().mov(0,250).alp(0).animate({props:{alpha:1}});
 
 	button.on("click", function(){
 		asset("beach_ocean.mp3").play({volume:.2,loop:true});
