@@ -123,16 +123,16 @@
       const physics = new Physics(15, new Boundary(bg.x, bg.y, bg.width, bg.height), true)
       const sand = new Rectangle(130, 25, "yellow").centerReg().pos(440, 2350).alp(0).addPhysics(false);
       const platform = asset("umbrella_yellow.png").centerReg().pos(180, 2000).addPhysics(false);
-  			const platform2 = asset("umbrella_red.png").centerReg().pos(320, 1600).addPhysics(false);
+  			const platform2 = asset("umbrella_red.png").centerReg().pos(400, 1600).addPhysics(false); //320
   				const platform3 = asset("umbrella_blue.png").centerReg().pos(180, 1200).addPhysics(false);
   					const platform4 = asset("umbrella_yellow_2.png").centerReg().pos(600, 800).addPhysics(false);
   						const platform5 = asset("umbrella_red_2.png").centerReg().pos(180, 400).addPhysics(false);
   					const platform6 = asset("umbrella_blue_2.png").centerReg().pos(600, 0).addPhysics(false);
   				const platform7 = asset("umbrella_yellow_3.png").centerReg().pos(180, -400).addPhysics(false);
-  			const platform8 = asset("umbrella_red_3.png").centerReg().pos(600, -800).addPhysics(false);
-  		const platform9 = asset("umbrella_blue_3.png").centerReg().pos(180, -1200).addPhysics(false);
+  			const platform8 = asset("umbrella_red_3.png").centerReg().pos(700, -800).addPhysics(false);
+  		const platform9 = asset("umbrella_blue_3.png").centerReg().pos(100, -1100).addPhysics(false);
 
-      const sun = new Circle(50, "orange").centerReg().pos(380, -1200).addPhysics(false);
+      const sun = asset("sun.png").sca(.5).centerReg().pos(85, -1600).addPhysics(false);
 
 
       const ball = asset("beachball.png").siz(100).centerReg().pos(460,bg.height/2)
@@ -170,6 +170,7 @@
           // ball.noControl();
           Ticker.removeAll([stage]);
           endGame();
+          stage.update();
         }
         if(ball.hitTestBounds(sun)){
           beachOcean.stop({volume:.5,loop:true});
@@ -196,7 +197,7 @@
           // ball.noControl();
           Ticker.removeAll([stage]);
           champ();
-
+          stage.update();
         }
       });
 
@@ -230,23 +231,17 @@
         size: 25,
       });
 
-      const tryagain2 = new Label({
-        text:"Click the button to try again.",
-        font:"cream",
-        color:"red",
-        size: 25,
-      }).alp(0);
-
-      const pane = new Pane({width:850, height:450, label:tryagain, modal:false, displayClose:false}).show().mov(85, 2050); //85, 2050
+      const pane = new Pane({width:550, height:300, label:tryagain, modal:false, displayClose:false}).show().loc(85, 2050); //85, 2050
       const endscreen = new Container(stageW,stageH).addTo();
-      const button2 = new Button(200,60,"Try Again").addTo(pane).pos(0, 280, CENTER, TOP);
+      const button2 = new Button(200,60,"Try Again").addTo(pane).pos(0, 200, CENTER, TOP);
       button2.on("click", function(){
         button2.removeFrom();
         endscreen.removeFrom();
         pane.hide();
         tryagain.removeFrom();
-        stage.update();
         startGame();
+        stage.update();
+
       });
     }
 
@@ -258,7 +253,7 @@
         size: 25,
       });
 
-      const pane2 = new Pane({width:850, height:450, label:awesome, modal:false, displayClose:false}).pos(85, -1200);
+      const pane2 = new Pane({width:550, height:300, label:awesome, modal:false, displayClose:false}).pos(85, -1600);
       const endscreen2 = new Container(stageW,stageH).addTo();
       const button3 = new Button(200,60,"Try Again").addTo(pane2).pos(0, 280, CENTER, TOP);
       button3.on("click", function(){
