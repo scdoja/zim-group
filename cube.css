@@ -1,11 +1,11 @@
 body {
 	margin: 0;
 	background-color: #000;
-	color: #000;
+	color: #ffed00;
 	font-family: Monospace;
 	font-size: 13px;
 	line-height: 24px;
-	overscroll-behavior: none;
+	text-shadow: 2px 2px 4px #000000;
 }
 
 a {
@@ -91,16 +91,16 @@ a, button, input, select {
 	z-index: 100;
 	display:block;
 	font-weight: bold;
-	font-size: 18px;
+	font-size: 24px;
 }
 
 #info2 {
 	position: absolute;
-	top: 80px;
+	top: 100px;
 	width: 100%;
 	text-align: center;
 	z-index: 100;
 	display:block;
 	font-weight: bold;
-	font-size: 18px;
+	font-size: 24px;
 }
