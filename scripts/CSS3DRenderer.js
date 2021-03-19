@@ -1,78 +1,62 @@
-import {
-	Matrix4,
-	Object3D
-} from 'https://unpkg.com/three/build/three.module.js';
+/***************************************************************************************
+*	 (Jason, Santiago, Pratik) - CODE WAS SOURCED AND BASED FROM
+*    Title: ThreeJS CSS3DRenderer
+*    Author: threejs.org/
+*    Date: March 16, 2021
+*    Code version: N/A
+*    Availability: http://www.emagix.net/academic/mscs-project/item/camera-sync-with-css3-and-webgl-threejs
+***************************************************************************************/
 
-/**
- * Based on http://www.emagix.net/academic/mscs-project/item/camera-sync-with-css3-and-webgl-threejs
- */
+	import {
+		Matrix4,
+		Object3D
+	} from 'https://unpkg.com/three/build/three.module.js';
 
-var CSS3DObject = function ( element ) {
+	var CSS3DObject = function (element) {
+		Object3D.call(this);
 
-	Object3D.call( this );
+		this.element = element || document.createElement('div');
+		this.element.style.position = 'absolute';
+		this.element.style.pointerEvents = 'auto';
 
-	this.element = element || document.createElement( 'div' );
-	this.element.style.position = 'absolute';
-	this.element.style.pointerEvents = 'auto';
+		this.addEventListener('removed', function () {
+			this.traverse( function (object) {
+			if (object.element instanceof Element && object.element.parentNode !== null) {
+				object.element.parentNode.removeChild( object.element);
+				}
+			});
+		});
+	};
 
-	this.addEventListener( 'removed', function () {
+	CSS3DObject.prototype = Object.assign(Object.create( Object3D.prototype), {
+		constructor: CSS3DObject,
+		copy: function (source, recursive) {
+			Object3D.prototype.copy.call(this, source, recursive);
+			this.element = source.element.cloneNode(true);
+			return this;
+		}
+	});
 
-		this.traverse( function ( object ) {
+	var CSS3DSprite = function (element) {
+		CSS3DObject.call(this, element);
+	};
 
-			if ( object.element instanceof Element && object.element.parentNode !== null ) {
+	CSS3DSprite.prototype = Object.create(CSS3DObject.prototype);
+	CSS3DSprite.prototype.constructor = CSS3DSprite;
 
-				object.element.parentNode.removeChild( object.element );
 
-			}
-
-		} );
-
-	} );
-
-};
-
-CSS3DObject.prototype = Object.assign( Object.create( Object3D.prototype ), {
-
-	constructor: CSS3DObject,
-
-	copy: function ( source, recursive ) {
-
-		Object3D.prototype.copy.call( this, source, recursive );
-
-		this.element = source.element.cloneNode( true );
-
-		return this;
-
-	}
-
-} );
-
-var CSS3DSprite = function ( element ) {
-
-	CSS3DObject.call( this, element );
-
-};
-
-CSS3DSprite.prototype = Object.create( CSS3DObject.prototype );
-CSS3DSprite.prototype.constructor = CSS3DSprite;
-
-//
-
-var CSS3DRenderer = function () {
-
-	var _this = this;
-
-	var _width, _height;
-	var _widthHalf, _heightHalf;
-
-	var matrix = new Matrix4();
-
-	var cache = {
-		camera: { fov: 0, style: '' },
-		objects: new WeakMap()
+	var CSS3DRenderer = function () {
+		var _this = this;
+		var _width, _height;
+		var _widthHalf, _heightHalf;
+		var matrix = new Matrix4();
+		var cache = {
+			camera: {fov: 0, style: ''},
+			objects: new WeakMap()
 	};
 
 	var domElement = document.createElement( 'div' );
+
 	domElement.style.overflow = 'hidden';
 
 	this.domElement = domElement;
@@ -85,16 +69,13 @@ var CSS3DRenderer = function () {
 	domElement.appendChild( cameraElement );
 
 	this.getSize = function () {
-
 		return {
 			width: _width,
 			height: _height
 		};
-
 	};
 
 	this.setSize = function ( width, height ) {
-
 		_width = width;
 		_height = height;
 		_widthHalf = _width / 2;
@@ -109,15 +90,11 @@ var CSS3DRenderer = function () {
 	};
 
 	function epsilon( value ) {
-
 		return Math.abs( value ) < 1e-10 ? 0 : value;
-
 	}
 
 	function getCameraCSSMatrix( matrix ) {
-
 		var elements = matrix.elements;
-
 		return 'matrix3d(' +
 			epsilon( elements[ 0 ] ) + ',' +
 			epsilon( - elements[ 1 ] ) + ',' +
@@ -136,11 +113,9 @@ var CSS3DRenderer = function () {
 			epsilon( elements[ 14 ] ) + ',' +
 			epsilon( elements[ 15 ] ) +
 		')';
-
 	}
 
 	function getObjectCSSMatrix( matrix ) {
-
 		var elements = matrix.elements;
 		var matrix3d = 'matrix3d(' +
 			epsilon( elements[ 0 ] ) + ',' +
@@ -162,37 +137,31 @@ var CSS3DRenderer = function () {
 		')';
 
 		return 'translate(-50%,-50%)' + matrix3d;
-
 	}
 
 	function renderObject( object, scene, camera, cameraCSSMatrix ) {
-
-		if ( object instanceof CSS3DObject ) {
-
-			object.onBeforeRender( _this, scene, camera );
+		if (object instanceof CSS3DObject) {
+			object.onBeforeRender(_this, scene, camera);
 
 			var style;
-
-			if ( object instanceof CSS3DSprite ) {
+			if (object instanceof CSS3DSprite) {
 
 				// http://swiftcoder.wordpress.com/2008/11/25/constructing-a-billboard-matrix/
 
-				matrix.copy( camera.matrixWorldInverse );
+				matrix.copy(camera.matrixWorldInverse);
 				matrix.transpose();
-				matrix.copyPosition( object.matrixWorld );
-				matrix.scale( object.scale );
+				matrix.copyPosition(object.matrixWorld);
+				matrix.scale(object.scale);
 
 				matrix.elements[ 3 ] = 0;
 				matrix.elements[ 7 ] = 0;
 				matrix.elements[ 11 ] = 0;
 				matrix.elements[ 15 ] = 1;
 
-				style = getObjectCSSMatrix( matrix );
+				style = getObjectCSSMatrix(matrix);
 
 			} else {
-
-				style = getObjectCSSMatrix( object.matrixWorld );
-
+				style = getObjectCSSMatrix(object.matrixWorld);
 			}
 
 			var element = object.element;

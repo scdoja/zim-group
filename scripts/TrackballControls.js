@@ -1,3 +1,12 @@
+/***************************************************************************************
+*	 (Jason, Santiago, Pratik) - CODE WAS SOURCED AND BASED FROM
+*    Title: ThreeJS TrackBallControls
+*    Author: threejs.org/
+*    Date: March 16, 2021
+*    Code version: N/A
+*    Availability: https://github.com/mrdoob/three.js
+***************************************************************************************/
+
 import {
 	EventDispatcher,
 	MOUSE,
