@@ -55,18 +55,18 @@
 			objects: new WeakMap()
 	};
 
-	var domElement = document.createElement( 'div' );
+	var domElement = document.createElement('div');
 
 	domElement.style.overflow = 'hidden';
 
 	this.domElement = domElement;
 
-	var cameraElement = document.createElement( 'div' );
+	var cameraElement = document.createElement('div');
 
 	cameraElement.style.transformStyle = 'preserve-3d';
 	cameraElement.style.pointerEvents = 'none';
 
-	domElement.appendChild( cameraElement );
+	domElement.appendChild(cameraElement);
 
 	this.getSize = function () {
 		return {
@@ -89,65 +89,63 @@
 
 	};
 
-	function epsilon( value ) {
-		return Math.abs( value ) < 1e-10 ? 0 : value;
+	function epsilon(value) {
+		return Math.abs(value) < 1e-10 ? 0 : value;
 	}
 
-	function getCameraCSSMatrix( matrix ) {
+	function getCameraCSSMatrix(matrix) {
 		var elements = matrix.elements;
 		return 'matrix3d(' +
-			epsilon( elements[ 0 ] ) + ',' +
-			epsilon( - elements[ 1 ] ) + ',' +
-			epsilon( elements[ 2 ] ) + ',' +
-			epsilon( elements[ 3 ] ) + ',' +
-			epsilon( elements[ 4 ] ) + ',' +
-			epsilon( - elements[ 5 ] ) + ',' +
-			epsilon( elements[ 6 ] ) + ',' +
-			epsilon( elements[ 7 ] ) + ',' +
-			epsilon( elements[ 8 ] ) + ',' +
-			epsilon( - elements[ 9 ] ) + ',' +
-			epsilon( elements[ 10 ] ) + ',' +
-			epsilon( elements[ 11 ] ) + ',' +
-			epsilon( elements[ 12 ] ) + ',' +
-			epsilon( - elements[ 13 ] ) + ',' +
-			epsilon( elements[ 14 ] ) + ',' +
-			epsilon( elements[ 15 ] ) +
+			epsilon(elements[ 0 ]) + ',' +
+			epsilon(-elements[ 1 ]) + ',' +
+			epsilon(elements[ 2 ]) + ',' +
+			epsilon(elements[ 3 ]) + ',' +
+			epsilon(elements[ 4 ]) + ',' +
+			epsilon(-elements[ 5 ]) + ',' +
+			epsilon(elements[ 6 ]) + ',' +
+			epsilon(elements[ 7 ]) + ',' +
+			epsilon(elements[ 8 ]) + ',' +
+			epsilon(-elements[ 9 ]) + ',' +
+			epsilon(elements[ 10 ]) + ',' +
+			epsilon(elements[ 11 ]) + ',' +
+			epsilon(elements[ 12 ]) + ',' +
+			epsilon(-elements[ 13 ]) + ',' +
+			epsilon(elements[ 14 ]) + ',' +
+			epsilon(elements[ 15 ]) +
 		')';
 	}
 
 	function getObjectCSSMatrix( matrix ) {
 		var elements = matrix.elements;
 		var matrix3d = 'matrix3d(' +
-			epsilon( elements[ 0 ] ) + ',' +
-			epsilon( elements[ 1 ] ) + ',' +
-			epsilon( elements[ 2 ] ) + ',' +
-			epsilon( elements[ 3 ] ) + ',' +
-			epsilon( - elements[ 4 ] ) + ',' +
-			epsilon( - elements[ 5 ] ) + ',' +
-			epsilon( - elements[ 6 ] ) + ',' +
-			epsilon( - elements[ 7 ] ) + ',' +
-			epsilon( elements[ 8 ] ) + ',' +
-			epsilon( elements[ 9 ] ) + ',' +
-			epsilon( elements[ 10 ] ) + ',' +
-			epsilon( elements[ 11 ] ) + ',' +
-			epsilon( elements[ 12 ] ) + ',' +
-			epsilon( elements[ 13 ] ) + ',' +
-			epsilon( elements[ 14 ] ) + ',' +
-			epsilon( elements[ 15 ] ) +
+			epsilon(elements[ 0 ]) + ',' +
+			epsilon(elements[ 1 ]) + ',' +
+			epsilon(elements[ 2 ]) + ',' +
+			epsilon(elements[ 3 ]) + ',' +
+			epsilon(-elements[ 4 ]) + ',' +
+			epsilon(-elements[ 5 ]) + ',' +
+			epsilon(-elements[ 6 ]) + ',' +
+			epsilon(-elements[ 7 ]) + ',' +
+			epsilon(elements[ 8 ]) + ',' +
+			epsilon(elements[ 9 ]) + ',' +
+			epsilon(elements[ 10 ]) + ',' +
+			epsilon(elements[ 11 ]) + ',' +
+			epsilon(elements[ 12 ]) + ',' +
+			epsilon(elements[ 13 ]) + ',' +
+			epsilon(elements[ 14 ]) + ',' +
+			epsilon(elements[ 15 ]) +
 		')';
 
 		return 'translate(-50%,-50%)' + matrix3d;
 	}
 
 	function renderObject( object, scene, camera, cameraCSSMatrix ) {
+
 		if (object instanceof CSS3DObject) {
 			object.onBeforeRender(_this, scene, camera);
 
 			var style;
 			if (object instanceof CSS3DSprite) {
-
-				// http://swiftcoder.wordpress.com/2008/11/25/constructing-a-billboard-matrix/
-
 				matrix.copy(camera.matrixWorldInverse);
 				matrix.transpose();
 				matrix.copyPosition(object.matrixWorld);
@@ -157,77 +155,64 @@
 				matrix.elements[ 7 ] = 0;
 				matrix.elements[ 11 ] = 0;
 				matrix.elements[ 15 ] = 1;
-
 				style = getObjectCSSMatrix(matrix);
 
-			} else {
+			}else{
 				style = getObjectCSSMatrix(object.matrixWorld);
 			}
 
 			var element = object.element;
-			var cachedObject = cache.objects.get( object );
+			var cachedObject = cache.objects.get(object);
 
-			if ( cachedObject === undefined || cachedObject.style !== style ) {
-
+			if (cachedObject === undefined || cachedObject.style !== style) {
 				element.style.transform = style;
-
-				var objectData = { style: style };
-				cache.objects.set( object, objectData );
-
+				var objectData = {style: style};
+				cache.objects.set(object, objectData);
 			}
 
 			element.style.display = object.visible ? '' : 'none';
-
-			if ( element.parentNode !== cameraElement ) {
-
-				cameraElement.appendChild( element );
-
+			if (element.parentNode !== cameraElement) {
+				cameraElement.appendChild(element);
 			}
 
-			object.onAfterRender( _this, scene, camera );
+			object.onAfterRender(_this, scene, camera);
 
 		}
 
-		for ( var i = 0, l = object.children.length; i < l; i ++ ) {
+		for (var i = 0, l = object.children.length; i < l; i ++) {
 
-			renderObject( object.children[ i ], scene, camera, cameraCSSMatrix );
+			renderObject(object.children[ i ], scene, camera, cameraCSSMatrix);
 
 		}
 
 	}
 
-	this.render = function ( scene, camera ) {
+	this.render = function (scene, camera) {
 
 		var fov = camera.projectionMatrix.elements[ 5 ] * _heightHalf;
 
-		if ( cache.camera.fov !== fov ) {
-
+		if (cache.camera.fov !== fov) {
 			domElement.style.perspective = camera.isPerspectiveCamera ? fov + 'px' : '';
 			cache.camera.fov = fov;
-
 		}
 
-		if ( scene.autoUpdate === true ) scene.updateMatrixWorld();
-		if ( camera.parent === null ) camera.updateMatrixWorld();
+		if (scene.autoUpdate === true) scene.updateMatrixWorld();
+		if (camera.parent === null) camera.updateMatrixWorld();
 
-		if ( camera.isOrthographicCamera ) {
-
-			var tx = - ( camera.right + camera.left ) / 2;
-			var ty = ( camera.top + camera.bottom ) / 2;
-
+		if (camera.isOrthographicCamera) {
+			var tx = - (camera.right + camera.left) / 2;
+			var ty = (camera.top + camera.bottom) / 2;
 		}
 
 		var cameraCSSMatrix = camera.isOrthographicCamera ?
-			'scale(' + fov + ')' + 'translate(' + epsilon( tx ) + 'px,' + epsilon( ty ) + 'px)' + getCameraCSSMatrix( camera.matrixWorldInverse ) :
-			'translateZ(' + fov + 'px)' + getCameraCSSMatrix( camera.matrixWorldInverse );
+			'scale(' + fov + ')' + 'translate(' + epsilon(tx) + 'px,' + epsilon(ty) + 'px)' + getCameraCSSMatrix(camera.matrixWorldInverse) :
+			'translateZ(' + fov + 'px)' + getCameraCSSMatrix(camera.matrixWorldInverse);
 
 		var style = cameraCSSMatrix +
 			'translate(' + _widthHalf + 'px,' + _heightHalf + 'px)';
 
 		if ( cache.camera.style !== style ) {
-
 			cameraElement.style.transform = style;
-
 			cache.camera.style = style;
 
 		}
